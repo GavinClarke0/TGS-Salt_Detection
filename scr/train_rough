@@ -1,0 +1,72 @@
+# basic imports
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+
+# keras
+from keras.preprocessing.image import ImageDataGenerator, load_img
+from keras.layers import *
+from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+
+from skimage.transform import resize
+from tqdm import tqdm_notebook
+from sklearn.model_selection import train_test_split
+
+from Unet_BasicArch import *
+
+# Constants
+TARGET_SIZE = 128
+ORIGINAL_SIZE = 101
+
+# functions
+def resizeUp(img):
+    ## add check of image size
+    return resize(img, (TARGET_SIZE, TARGET_SIZE), mode='constant', preserve_range=True)
+
+def resizeDown(img):
+    ## size down
+    return resize(img, (ORIGINAL_SIZE, ORIGINAL_SIZE), mode='constant', preserve_range=True)
+
+# Data Loading and feature creation
+train_df = pd.read_csv("C:\\Users\Gavin Clarke\Documents\Kaggle\SaltDepositID\\train_csv.csv", index_col="id", usecols=[0,1])
+depths_df = pd.read_csv("C:\\Users\Gavin Clarke\Documents\Kaggle\SaltDepositID\depths_csv.csv", index_col="id")
+train_df = train_df.join(depths_df)
+
+train_df["images"] = [np.array(load_img("C:\\Users\Gavin Clarke\Documents\Kaggle\SaltDepositID\\train\images\{}.png".format(idx), grayscale=True)) / 255 for idx in tqdm_notebook(train_df.index)]
+train_df["masks"] = [np.array(load_img("C:\\Users\Gavin Clarke\Documents\Kaggle\SaltDepositID\\train\masks\{}.png".format(idx), grayscale=True)) / 255 for idx in tqdm_notebook(train_df.index)]
+train_df["coverage"] = train_df.masks.map(np.sum) / pow(ORIGINAL_SIZE, 2)
+
+test_df = depths_df[~depths_df.index.isin(train_df.index)]
+test_df.to_csv("C:\\Users\Gavin Clarke\Documents\Kaggle\SaltDepositID\\test_ids.csv")
+
+## review why numpy array to list is required
+ids_train, ids_valid, x_train, x_valid, y_train, y_valid, depth_train, depth_test = train_test_split(
+    train_df.index.values,
+    np.array(train_df.images.map(resizeUp).tolist()).reshape(-1, TARGET_SIZE, TARGET_SIZE, 1),
+    np.array(train_df.masks.map(resizeUp).tolist()).reshape(-1, TARGET_SIZE, TARGET_SIZE, 1),
+    train_df.z.values,
+    test_size=0.2, random_state=1337)
+
+#  Create Model
+input_layer = Input((TARGET_SIZE, TARGET_SIZE, 1))
+
+uNet = UNetBasic(input_layer, 8)
+
+model = uNet.returnModel()
+
+model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+
+early_stopping = EarlyStopping(patience=10, verbose=1)
+model_checkpoint = ModelCheckpoint("C:\\Users\Gavin Clarke\Documents\Kaggle\SaltDepositID\KerasModelCheckPoints\TestModel_ML", save_best_only=True, verbose=1)
+reduce_lr = ReduceLROnPlateau(factor=0.1, patience=5, min_lr=0.00001, verbose=1)
+
+epochs = 15
+batch_size = 32
+
+history = model.fit(x_train, y_train,
+                    validation_data=[x_valid, y_valid],
+                    epochs=epochs,
+                    batch_size=batch_size,
+                    callbacks=[early_stopping, model_checkpoint, reduce_lr])
+
+
