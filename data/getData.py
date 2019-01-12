@@ -1,6 +1,8 @@
 import zipfile
 
 """ extracts directory into directory 
+|_ train.csv
+|_ depths.csv
 |_ train
   |_images
   |_masks
