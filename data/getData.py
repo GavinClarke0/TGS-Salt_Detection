@@ -1,12 +1,12 @@
 import zipfile
 
-" extracts directory into directory 
-|_train
+""" extracts directory into directory 
+|_ train
   |_images
   |_masks
 |_test
   |_images
-|_ depths.csv
+|_ depths.csv """
 
   
 
