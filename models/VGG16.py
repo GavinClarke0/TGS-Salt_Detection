@@ -6,7 +6,7 @@ class Vgg16_Unet:
     def __init__(self, inputLayer ):
 
         ## Constants #
-        self.WEIGHTS_PATH_NO_TOP = "vgg16_weights_th_dim_ordering_th_kernels_notop.h5"
+        self.WEIGHTS_PATH_NO_TOP = "https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels_notop.h5"
 
         self.input_layer = inputLayer
         self.output_layer = self.build_Vgg16Unet(inputLayer)
