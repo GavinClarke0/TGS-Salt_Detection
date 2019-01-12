@@ -5,6 +5,8 @@ from keras.layers import *
 import seaborn as sns
 sns.set_style("white")
 
+""" https://www.kaggle.com/meaninglesslives/getting-0-87-on-private-lb-using-kaggle-kernel
+"""
 
 ## Stochastic weight averaging ## 
 
