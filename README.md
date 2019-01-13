@@ -18,7 +18,7 @@ Initial Training:
 
 Test Data Score: 0.635534
 
-![alt text](TGS-Salt_Detection/readme_files/myplot.png "VGG16 Model Predictions")
+![VGG16 Predictions](TGS-Salt_Detection/readme_files/myplot.png "VGG16 Model Predictions")
 
 
 
