@@ -30,12 +30,22 @@ Decoder: 3 *  conv2d (1, 1), activation 'relu', batchNormalization with upsampli
 
 Created 5 Fold stratified by salt coverage: 
 
-Initial Training:
+Training:
 
-fold1:
+Initial Training fold1:
 - 100 epochs, bce + diceloss 
 
 ![Resnet50 Predictions](https://github.com/GavinClarke0/TGS-Salt_Detection/blob/master/readme_files/resNet50_100epochbce_fold1.png "ResNet50 Fold 1 Model Predictions")
+
+- 50 epochs, lovasz loss
+  - learning rate too high, failed to include reduce on plateau
+  
+ ![Resnet50 Predictions](https://github.com/GavinClarke0/TGS-Salt_Detection/blob/master/readme_files/resNet50_50epochlovaz_fold1.png "ResNet50 Fold 1 Model Predictions")
+ 
+ - 50 epochs, lovasz loss 
+  -Predictions
+ 
+ ![Resnet50 Predictions](https://github.com/GavinClarke0/TGS-Salt_Detection/blob/master/readme_files/resnet50train1pred.png "ResNet50 Fold 1 Model Predictions")
 
 fold2:
 - 100 epochs, bce + diceloss
