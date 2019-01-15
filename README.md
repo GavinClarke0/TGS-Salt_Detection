@@ -35,8 +35,11 @@ Initial Training:
 fold1:
 - 100 epochs, bce + diceloss 
 
+![Resnet50 Predictions](https://github.com/GavinClarke0/TGS-Salt_Detection/blob/master/readme_files/resNet50_100epochbce_fold1.png "ResNet50 Fold 1 Model Predictions")
 
-
+fold2:
+- 100 epochs, bce + diceloss
+![Resnet50 Predictions](https://github.com/GavinClarke0/TGS-Salt_Detection/blob/master/readme_files/resNet50_100epochbce_fold2.png "ResNet50 Fold 2 Model Predictions")
 
 
 
