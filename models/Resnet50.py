@@ -1,9 +1,12 @@
+
+""" Heavily based on Siddhartha's ResNet50 code
+https://www.kaggle.com/meaninglesslives/using-resnet50-pretrained-model-in-keras 
+Merged into class for increased deployability
+"""
+
 from keras import Model
 from keras.layers import *
 from keras import layers
-
-""" based on Siddhartha's ResNet50 code
-https://www.kaggle.com/meaninglesslives/using-resnet50-pretrained-model-in-keras """
 
 from keras import Model
 from keras.layers import *
@@ -72,16 +75,6 @@ class Resnet50_Unet():
         return model
 
     def identity_block(self, input_tensor, kernel_size, filters, stage, block):
-        """The identity block is the block that has no conv layer at shortcut.
-        # Arguments
-            input_tensor: input tensor
-            kernel_size: default 3, the kernel size of middle conv layer at main path
-            filters: list of integers, the filters of 3 conv layer at main path
-            stage: integer, current stage label, used for generating layer names
-            block: 'a','b'keras.., current block label, used for generating layer names
-        # Returns
-            Output tensor for the block.
-        """
         
         filters1, filters2, filters3 = filters
         if K.image_data_format() == 'channels_last':
@@ -110,18 +103,7 @@ class Resnet50_Unet():
 
 
     def conv_block(self, input_tensor, kernel_size, filters, stage, block, strides=(2, 2)):
-        """A block that has a conv layer at shortcut.
-        # Arguments
-            input_tensor: input tensor
-            kernel_size: default 3, the kernel size of middle conv layer at main path
-            filters: list of integers, the filters of 3 conv layer at main path
-            stage: integer, current stage label, used for generating layer names
-            block: 'a','b'keras.., current block label, used for generating layer names
-        # Returns
-            Output tensor for the block.
-        Note that from stage 3, the first conv layer at main path is with strides=(2,2)
-        And the shortcut should have strides=(2,2) as well
-        """
+
         filters1, filters2, filters3 = filters
         if K.image_data_format() == 'channels_last':
             bn_axis = 3
